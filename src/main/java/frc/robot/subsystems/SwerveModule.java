@@ -43,9 +43,8 @@ public class SwerveModule extends SubsystemBase {
     this.absoluteEncoderReversed = absoluteEncoderReversed;
 
     driveID = driveMotorId;
-    absoluteEncoder = new CANcoder(absoluteEncoderId);
-
     turnID = turnMotorId;
+    absoluteEncoder = new CANcoder(absoluteEncoderId);
 
     driveMotor = new WolfSparkMax(driveMotorId, MotorType.kBrushless, IdleMode.kCoast, 45, driveMotorReversed);
     turnMotor = new WolfSparkMax(turnMotorId, MotorType.kBrushless, IdleMode.kCoast, 25, turnMotorReversed);
@@ -139,12 +138,16 @@ public class SwerveModule extends SubsystemBase {
         ? lastAngle
         : desiredState.angle; // Prevent rotating module if speed is less then 1%. Prevents Jittering.
 
-    turnMotor.set(turnPIDController.calculate(getTurnMotorPosition(), desiredState.angle.getRadians()));
+    turnMotor.set(turnPIDController.calculate(getTurnMotorPositionWrapped(), desiredState.angle.getRadians()));
     lastAngle = angle;
   }
 
   public void stop() {
     driveMotor.set(0);
     turnMotor.set(0);
+  }
+
+  public double getTurnMotorPositionWrapped(){
+    return Math.IEEEremainder(getTurnMotorPosition(), 2 * Math.PI);
   }
 }

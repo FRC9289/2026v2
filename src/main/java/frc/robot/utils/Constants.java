@@ -48,10 +48,10 @@ public final class Constants {
     public static final double TURN_MOTOR_PCONVERSION = 2 * Math.PI / TURN_MOTOR_GEAR_RATIO;
     public static final double DRIVE_MOTOR_VCONVERSION = DRIVE_MOTOR_PCONVERSION / 60.0;
     public static final double TURN_MOTOR_VCONVERSION = TURN_MOTOR_PCONVERSION / 60.0;
-    public static final double KP_TURNING = 0.5;
+    public static final double KP_TURNING = .5;
 
-    public static final double DRIVETRAIN_MAX_SPEED = .5;
-    public static final double DRIVETRAIN_MAX_ANGULAR_SPEED = 0.75 * Math.PI;
+    public static final double DRIVETRAIN_MAX_SPEED = 3.91;
+    public static final double DRIVETRAIN_MAX_ANGULAR_SPEED = 3 * Math.PI;
 
     // Swerve Kinematics
     public static final double TRACK_WIDTH = Units.inchesToMeters(20.75);
@@ -70,9 +70,6 @@ public final class Constants {
     public static final double TELE_DRIVE_MAX_ACCELERATION = 3;
     public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION = 3;
 
-    // Auton constraints
-    public static final double AUTO_kP_TRANSLATION = 0.4;
-    public static final double AUTO_kP_ROTATION = 2.4;
   }
 
   public final class ControllerConstants {

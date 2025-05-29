@@ -7,7 +7,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.Preferences;
 
 public class WolfSparkMax extends SparkMax {
-    protected double gearRatio = 1.0; // Default gear ratio
     protected double target;
 
     /**

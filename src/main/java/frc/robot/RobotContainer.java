@@ -18,21 +18,20 @@ import frc.robot.controls.SwerveDriveControls;
 public class RobotContainer {
   public static final Joystick controller3D = new Joystick(0);
   public static final JoystickButton resetHeading_Start = new JoystickButton(controller3D, Constants.JoystickConstants.BaseRM);
-  // public static ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain drivetrain = Drivetrain.getInstance();
-  private SwerveDriveCommands swerveStopCmd;
+  private ParallelRaceGroup swerveStopCmd;
 
   SendableChooser<Command> auton_chooser;
-
-  //private final Command middleCommand = new MiddleStartAuto();
-
+  
   public RobotContainer() {
     CameraServer.startAutomaticCapture(0); // Start capturing from the first camera
     CameraServer.startAutomaticCapture(1); // Start capturing from the second camera
     drivetrain.setDefaultCommand(new SwerveDriveControls());
     configureBindings();
     auton_chooser = new SendableChooser<>();
-    swerveStopCmd = new SwerveDriveCommands(0, 0, 0, true);
+
+    swerveStopCmd = new SwerveDriveCommands(0, 0, 0, true).withTimeout(3);
+
     NamedCommands.registerCommand("Swerve Stop", swerveStopCmd);
 
     /** auton_chooser.setDefaultOption("Leave Start Position", nonSpeakerCommand);
@@ -44,16 +43,12 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // new Trigger(m_exampleSubsystem::exampleCondition)
-    // .onTrue(new ExampleCommand(m_exampleSubsystem));
     drivetrain.setDefaultCommand(new SwerveDriveControls());
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
-    // exampleSubsystem (raw subsys btw).setDefaultCommand(new exSubsysCommands(arm, controller3D)); 
   }
 
   public Command getAutonomousCommand() {
     // return auton_chooser.getSelected();
-    return new PathPlannerAuto("New Auto");
+    return new PathPlannerAuto("MidReefAuto");
   }
 }

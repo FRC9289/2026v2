@@ -33,11 +33,11 @@ public class SwerveDriveControls extends Command {
     double sideSpeed = RobotContainer.controller3D.getRawAxis(JoystickConstants.Y) * slider;
     double turnSpeed = RobotContainer.controller3D.getRawAxis(JoystickConstants.Rot) * slider;
 
-      cmd = new SwerveDriveCommands(
-          frontSpeed,
-          sideSpeed,
-          turnSpeed,
-          fieldOriented);
-      cmd.execute();
+    cmd = new SwerveDriveCommands(
+        frontSpeed,
+        sideSpeed,
+        turnSpeed,
+        fieldOriented);
+    cmd.execute();
   }
 }
