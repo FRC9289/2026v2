@@ -1,5 +1,7 @@
 package frc.robot;
 
+import javax.print.attribute.standard.Sides;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -12,43 +14,51 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Constants;
-import frc.robot.commands.*;
-import frc.robot.controls.SwerveDriveControls;
+import frc.robot.utils.Constants.JoystickConstants;
+import frc.robot.controls.SwerveDriveCommands;
 
 public class RobotContainer {
   public static final Joystick controller3D = new Joystick(0);
   public static final JoystickButton resetHeading_Start = new JoystickButton(controller3D, Constants.JoystickConstants.BaseRM);
   private final Drivetrain drivetrain = Drivetrain.getInstance();
   private ParallelRaceGroup swerveStopCmd;
-
   SendableChooser<Command> auton_chooser;
   
   public RobotContainer() {
     CameraServer.startAutomaticCapture(0); // Start capturing from the first camera
     CameraServer.startAutomaticCapture(1); // Start capturing from the second camera
-    drivetrain.setDefaultCommand(new SwerveDriveControls());
+
+    //call to configureBindings() method
     configureBindings();
-    auton_chooser = new SendableChooser<>();
 
-    swerveStopCmd = new SwerveDriveCommands(0, 0, 0, true).withTimeout(3);
-
+    // Register swerveStopCmd in Pathplanner to stop robot
+    swerveStopCmd = new SwerveDriveCommands(0.0,0.0,0.0).withTimeout(3);
     NamedCommands.registerCommand("Swerve Stop", swerveStopCmd);
 
-    /** auton_chooser.setDefaultOption("Leave Start Position", nonSpeakerCommand);
-    auton_chooser.addOption("Left Start", leftCommand);
-    auton_chooser.addOption("Middle Start", middleCommand);
-    auton_chooser.addOption("Right Auto", rightCommand); **/
-
+    //set up auton commands for the driver
+    auton_chooser = new SendableChooser<>();
+    auton_chooser.setDefaultOption("MidReefAuto", new PathPlannerAuto("MidReefAuto"));
     SmartDashboard.putData("Auton Chooser", auton_chooser);
   }
 
   private void configureBindings() {
-    drivetrain.setDefaultCommand(new SwerveDriveControls());
+    double slider = (-RobotContainer.controller3D.getRawAxis(JoystickConstants.Slider) + 1) / 2.0;
+    if (slider == 0)  {
+      slider = 0.001;
+    }
+
+    double frontSpeed = RobotContainer.controller3D.getRawAxis(JoystickConstants.X) * slider;
+    double sideSpeed = RobotContainer.controller3D.getRawAxis(JoystickConstants.Y) * slider;
+    double turnSpeed = RobotContainer.controller3D.getRawAxis(JoystickConstants.Rot) * slider;
+
+    //buttons
+
+    drivetrain.setDefaultCommand(new SwerveDriveCommands(frontSpeed,sideSpeed,turnSpeed));
+
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
   }
 
   public Command getAutonomousCommand() {
-    // return auton_chooser.getSelected();
-    return new PathPlannerAuto("MidReefAuto");
+    return auton_chooser.getSelected();
   }
 }
