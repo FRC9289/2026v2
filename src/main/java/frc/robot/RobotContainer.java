@@ -10,12 +10,14 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.JoystickConstants;
-import frc.robot.controls.SwerveDriveCommands;
+import frc.robot.controls.*;
 
 public class RobotContainer {
   public static final Joystick controller3D = new Joystick(0);
+  public static final Joystick buttonPanel = new Joystick(1);
   public static final JoystickButton resetHeading_Start = new JoystickButton(controller3D, Constants.JoystickConstants.BaseRM);
   private final Drivetrain drivetrain = Drivetrain.getInstance();
+  private final SpecDrive specDrive = SpecDrive.getInstance();
   private ParallelRaceGroup swerveStopCmd;
   SendableChooser<Command> auton_chooser;
   
@@ -46,11 +48,16 @@ public class RobotContainer {
     double sideSpeed = RobotContainer.controller3D.getRawAxis(JoystickConstants.Y) * slider;
     double turnSpeed = RobotContainer.controller3D.getRawAxis(JoystickConstants.Rot) * slider;
 
-    //buttons
-
     drivetrain.setDefaultCommand(new SwerveDriveCommands(frontSpeed,sideSpeed,turnSpeed));
 
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
+
+    //SpecDrive
+    for (int i = 0; i <= 7; i++) {
+      if (buttonPanel.getRawButton(i + 1)) {
+        specDrive.setDefaultCommand(new SpecDriveCommands(i));
+      }
+    }
   }
 
   public Command getAutonomousCommand() {

@@ -37,7 +37,7 @@ public class Drivetrain extends SubsystemBase {
   private SlewRateLimiter sideLimiter;
   private SlewRateLimiter turnLimiter;
 
-  private Pigeon2 gyro;
+  protected Pigeon2 gyro;
 
   private RobotConfig config;
   private SwerveDrivePoseEstimator poseEstimator;
@@ -266,5 +266,9 @@ public class Drivetrain extends SubsystemBase {
       return alliance.get() == DriverStation.Alliance.Red;
     }
     return false;
+  }
+
+  public Pigeon2 getGyro() {
+    return gyro;
   }
 }
