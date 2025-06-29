@@ -2,11 +2,13 @@ package frc.robot.subsystems;
 
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
 public class SpecDrive extends PIDSubsystem {
     private Drivetrain drivetrain = Drivetrain.getInstance();
     private static final SpecDrive specDrive = new SpecDrive();
+    private double yaw;
 
     public SpecDrive() {
         super(new PIDController(0.1, 0, 0));
@@ -16,19 +18,34 @@ public class SpecDrive extends PIDSubsystem {
 
     @Override
     protected double getMeasurement() {
-        return drivetrain.getGyro().getYaw().getValueAsDouble();
+        // Get the gyro yaw and ensure it is within -180 to 180
+        double yaw = drivetrain.getGyro().getYaw().getValueAsDouble();
+        if (yaw > 180) {
+            yaw -= 360; // Wrap to -180 to 180
+        }
+        return yaw;
     }
 
     @Override
     public void useOutput(double output, double setpoint) {
-        double turn = output * 0.01;
+        // Calculate the shortest path to the target angle
+        double diff = setpoint - drivetrain.getGyro().getYaw().getValueAsDouble();
+
+        // Wrap diff to ensure shortest path
+        if (diff > 180) {
+            diff -= 360;
+        } else if (diff < -180) {
+            diff += 360;
+        }
+
         drivetrain.swerveDrive(
-            0,
-            0,
-            turn,
+            0.0,
+            0.0,
+            output * 0.01,
             true,
-            null,
-            true);
+            new Translation2d(),
+            true
+        );
     }
     
     public void rotate(double rot) {
