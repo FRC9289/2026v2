@@ -21,7 +21,9 @@ public class SpecDrive extends PIDSubsystem {
         // Get the gyro yaw and ensure it is within -180 to 180
         double yaw = drivetrain.getGyro().getYaw().getValueAsDouble();
         if (yaw > 180) {
-            yaw -= 360; // Wrap to -180 to 180
+            yaw -= 360;
+        } else if (yaw < -180) {
+            yaw += 360;
         }
         return yaw;
     }
@@ -31,7 +33,6 @@ public class SpecDrive extends PIDSubsystem {
         // Calculate the shortest path to the target angle
         double diff = setpoint - drivetrain.getGyro().getYaw().getValueAsDouble();
 
-        // Wrap diff to ensure shortest path
         if (diff > 180) {
             diff -= 360;
         } else if (diff < -180) {
