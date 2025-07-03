@@ -20,11 +20,10 @@ public class SpecDriveCommands extends Command {
 
     @Override
     public void execute() {
-        double target = (pos * 45);
-        if (target > 180) {
-            target -= 360; // Wrap to -180 to 180
+        if (pos > 180) {
+            pos -= 360;
         }
-        specDrive.setSetpoint(target);
+        specDrive.setSetpoint(pos);
     }
 
     @Override

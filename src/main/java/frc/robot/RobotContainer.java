@@ -14,7 +14,7 @@ import frc.robot.controls.*;
 
 public class RobotContainer {
   public static final Joystick controller3D = new Joystick(0);
-  public static final Joystick buttonPanel = new Joystick(1);
+  public static final Joystick wolfByte = new Joystick(1);
   public static final JoystickButton resetHeading_Start = new JoystickButton(controller3D, Constants.JoystickConstants.BaseRM);
   private final Drivetrain drivetrain = Drivetrain.getInstance();
   private final SpecDrive specDrive = SpecDrive.getInstance();
@@ -52,12 +52,8 @@ public class RobotContainer {
 
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
 
-    //SpecDrive
-    for (int i = 0; i <= 7; i++) {
-      if (buttonPanel.getRawButton(i + 1)) {
-        specDrive.setDefaultCommand(new SpecDriveCommands(i));
-      }
-    }
+    specDrive.setDefaultCommand(new SpecDriveCommands(wolfByte.getPOV()));
+    //specDrive.setDefaultCommand(new SpecDriveCommands2(wolfByte.getRawAxis(0)));
   }
 
   public Command getAutonomousCommand() {
