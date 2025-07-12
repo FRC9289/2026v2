@@ -10,6 +10,7 @@ public class SpecDrive extends PIDSubsystem {
     private static final SpecDrive specDrive = new SpecDrive();
     private double yaw;
 
+    @SuppressWarnings("removal")
     public SpecDrive() {
         super(new PIDController(0.1, 0, 0));
         getController().setTolerance(1.0);
