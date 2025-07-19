@@ -22,6 +22,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,6 +38,10 @@ public class Drivetrain extends SubsystemBase {
   private SlewRateLimiter frontLimiter;
   private SlewRateLimiter sideLimiter;
   private SlewRateLimiter turnLimiter;
+
+  //AS support for 2D pose
+  StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
+  .getStructTopic("MyPose", Pose2d.struct).publish();
 
   protected Pigeon2 gyro;
 
@@ -145,7 +151,10 @@ public class Drivetrain extends SubsystemBase {
 
     SmartDashboard.putNumber("Robot Angle", getHeading());
     SmartDashboard.putString("Angular Speed",
-        new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "pi rad/s");
+        new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "pi rad/s"
+    );
+
+    publisher.set(poseEstimator.getEstimatedPosition()); //Publish estimated pose to logging
   }
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed,
