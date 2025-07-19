@@ -8,7 +8,7 @@ public class SpecDriveCommands extends Command {
     private SpecDrive specDrive;
 
     public SpecDriveCommands(int pos) {
-        this.specDrive = specDrive.getInstance();
+        this.specDrive = SpecDrive.getInstance();
         addRequirements(specDrive);
         this.pos = pos;
     }
