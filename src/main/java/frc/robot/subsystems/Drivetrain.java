@@ -23,6 +23,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,8 +41,12 @@ public class Drivetrain extends SubsystemBase {
   private SlewRateLimiter turnLimiter;
 
   //AS support for 2D pose
-  StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
+  StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
   .getStructTopic("MyPose", Pose2d.struct).publish();
+
+  //AS Support for Swerve
+  StructArrayPublisher<SwerveModuleState> swervePublisher = NetworkTableInstance.getDefault()
+  .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
 
   protected Pigeon2 gyro;
 
@@ -154,7 +159,8 @@ public class Drivetrain extends SubsystemBase {
         new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "pi rad/s"
     );
 
-    publisher.set(poseEstimator.getEstimatedPosition()); //Publish estimated pose to logging
+    posePublisher.set(poseEstimator.getEstimatedPosition()); //Publish estimated pose to logging
+    swervePublisher.set(getModuleStates()); //Publish module states to logging
   }
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed,
