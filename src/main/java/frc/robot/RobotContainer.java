@@ -15,6 +15,7 @@ import frc.robot.controls.*;
 public class RobotContainer {
   public static final Joystick controller3D = new Joystick(0);
   public static final Joystick wolfByte = new Joystick(1);
+  public static double pov;
   public static final JoystickButton resetHeading_Start = new JoystickButton(controller3D, Constants.JoystickConstants.BaseRM);
   private final Drivetrain drivetrain = Drivetrain.getInstance();
   private final SpecDrive specDrive = SpecDrive.getInstance();
@@ -52,7 +53,11 @@ public class RobotContainer {
 
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
 
-    specDrive.setDefaultCommand(new SpecDriveCommands(wolfByte.getPOV()));
+    //Comment out before driving. Will only let robot turn.
+    pov = wolfByte.getPOV();
+    if (pov != -1) {
+      specDrive.setDefaultCommand(new SpecDriveCommands(wolfByte.getPOV()));
+    }
     //specDrive.setDefaultCommand(new SpecDriveCommands2(wolfByte.getRawAxis(0)));
   }
 

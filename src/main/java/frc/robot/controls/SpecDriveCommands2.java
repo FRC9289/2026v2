@@ -15,22 +15,21 @@ public class SpecDriveCommands2 extends Command {
 
     @Override
     public void initialize() {
-        specDrive.getController().reset();
+        specDrive.PID().reset();
     }
 
     @Override
     public void execute() {
-        double target = (pos * 180);
-        specDrive.setSetpoint(target);
+        specDrive.Pos(pos * 180);
     }
 
     @Override
     public boolean isFinished() {
-        return specDrive.getController().atSetpoint();
+        return this.pos == specDrive.getMeasurement();
     }
 
     @Override
     public void end(boolean interrupted) {
-        specDrive.getController().reset();
+        specDrive.PID().reset();
     }
 }

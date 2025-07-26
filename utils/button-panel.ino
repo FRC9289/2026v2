@@ -1,19 +1,4 @@
 #include <Joystick.h>
-
-/*
-Include Path updating
-Consider adding a CMAKELIST.TXT to PROJECT
-@WOLFRAM121 U HAVE THE LIBRARY. LMK WHAT IT IS SO I CAN DOWNLOAD AND CREATE THE CMAKELIST
-
-CONCERNS:
-  WILL IT COMPILE TO THE ROBOT?
-    THE GRADLE IS MEANT FOR JAVA COMPILATION AND NOT FOR C++ DEVELOPMENT
-    DOES THAT MEAN WE NEED A SECOND COMPILER? I SUGGEST MIGRATING TO STILL USING TO WORK WITH ARDUINO/IOT IN JAVA
-    - @Aditya-2204
-    
-*/
-
-
 Joystick_ Joystick(
   JOYSTICK_DEFAULT_REPORT_ID, 
   JOYSTICK_TYPE_GAMEPAD, 
@@ -34,14 +19,14 @@ Joystick_ Joystick(
 
 #define CLK 10
 #define DT 11
-volatile long pos = 0;
+volatile float pos = 0.0;
 
-long wrap(long pos, int wrap) {
+float wrap(float pos, float wrap) {
   while (pos > wrap || pos < -wrap) {
     if (pos > wrap) {
-      pos -= 2 * wrap;
+      pos -= 2.0 * wrap;
     } else if (pos < -wrap) {
-      pos += 2 * wrap;
+      pos += 2.0 * wrap;
     }
   }
   return pos;
@@ -68,14 +53,18 @@ void setup() {
 }
 
 void loop() {
-  Joystick.setXAxis(int(wrap(pos, 1) * 127));
+  pos = wrap(pos, 1.0);
+  if (abs(pos) < 0.01) {
+    pos = 0.0;
+  }
+  Joystick.setXAxis(int((pos + 1.0) * 511.5));
 
-  int a = -1;
-  for (int y = 2; y <= 9; y++) {
-    if (digitalRead(y) == LOW) {
-      a = y - 2;
-      break;
+  int a = -1; // Default to -1 (no direction)
+  for (int x = 2; x <= 9; x++) {
+    if (digitalRead(x) == LOW) { // Check if the pin is LOW (connected to GND)
+      a = x - 2; // Map pin 2 to North (0), pin 3 to NE (1), etc.
+      break; // Stop checking once a pin is found
     }
   }
-  Joystick.setHatSwitch(0, a);
+  Joystick.setHatSwitch(0, a * 45); // Set the hat switch direction
 }

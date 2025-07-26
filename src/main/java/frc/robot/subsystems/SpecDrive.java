@@ -1,53 +1,31 @@
 package frc.robot.subsystems;
 
-import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class SpecDrive extends PIDSubsystem {
+public class SpecDrive extends SubsystemBase {
     private Drivetrain drivetrain = Drivetrain.getInstance();
     private static final SpecDrive specDrive = new SpecDrive();
+    private PIDController pid;
     private double yaw;
+    private double pos;
 
-    @SuppressWarnings("removal")
     public SpecDrive() {
-        super(new PIDController(0.1, 0, 0));
-        getController().setTolerance(1.0);
-
+        this.pid = new PIDController(0.1, 0, 0);
+        this.pid.enableContinuousInput(-180, 180);
     }
 
-    @Override
-    protected double getMeasurement() {
+
+    public double getMeasurement() {
         // Get the gyro yaw and ensure it is within -180 to 180
-        double yaw = drivetrain.getGyro().getYaw().getValueAsDouble();
+        yaw = drivetrain.getGyro().getYaw().getValueAsDouble();
         if (yaw > 180) {
             yaw -= 360;
         } else if (yaw < -180) {
             yaw += 360;
         }
         return yaw;
-    }
-
-    @Override
-    public void useOutput(double output, double setpoint) {
-        // Calculate the shortest path to the target angle
-        double diff = setpoint - drivetrain.getGyro().getYaw().getValueAsDouble();
-
-        if (diff > 180) {
-            diff -= 360;
-        } else if (diff < -180) {
-            diff += 360;
-        }
-
-        drivetrain.swerveDrive(
-            0.0,
-            0.0,
-            output * 0.01,
-            true,
-            new Translation2d(),
-            true
-        );
     }
     
     public void rotate(double rot) {
@@ -63,7 +41,27 @@ public class SpecDrive extends PIDSubsystem {
         }
     }
 
+    @Override
+    public void periodic() {
+        drivetrain.swerveDrive(
+            0.0,
+            0.0,
+            0.01 * pid.calculate(getMeasurement(), this.pos),
+            true,
+            new Translation2d(),
+            true
+        );
+    }
+
+    public void Pos(double pos) {
+        this.pos = pos;
+    }
+
     public static SpecDrive getInstance() {
         return specDrive;
+    }
+
+    public PIDController PID() {
+        return pid;
     }
 }
