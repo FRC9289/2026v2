@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -20,6 +21,7 @@ public class WolfSend extends SubsystemBase {
 
     private Drivetrain drivetrain = Drivetrain.getInstance();
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
+    SwerveModuleState[] states = new SwerveModuleState[4];
     private static final WolfSend wolfSend = new WolfSend();
 
     public WolfSend() {
@@ -38,11 +40,12 @@ public class WolfSend extends SubsystemBase {
 
     @Override
     public void periodic() {
+        states = drivetrain.getModuleStates();
         positions = drivetrain.getModulePositions();
-        LFD.setDouble(positions[0].distanceMeters);
-        LBD.setDouble(positions[2].distanceMeters);
-        RBD.setDouble(positions[3].distanceMeters);
-        RFD.setDouble(positions[1].distanceMeters);
+        LFD.setDouble(states[0].speedMetersPerSecond);
+        LBD.setDouble(states[2].speedMetersPerSecond);
+        RBD.setDouble(states[3].speedMetersPerSecond);
+        RFD.setDouble(states[1].speedMetersPerSecond);
         LFR.setDouble(positions[0].angle.getDegrees());
         LBR.setDouble(positions[2].angle.getDegrees());
         RBR.setDouble(positions[3].angle.getDegrees());
