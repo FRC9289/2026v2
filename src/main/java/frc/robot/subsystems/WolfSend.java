@@ -58,6 +58,7 @@ public class WolfSend extends SubsystemBase {
         RFR.setDouble(positions[1].angle.getDegrees());
         POS_X.setDouble(drivetrain.getPose().getX());
         POS_Y.setDouble(drivetrain.getPose().getY());
+        ANGLE.setDouble(drivetrain.getPose().getRotation().getDegrees());
         statusText.setString("Uknown Status");
     }
 
