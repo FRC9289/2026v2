@@ -275,6 +275,15 @@ public class Drivetrain extends SubsystemBase {
     return positions;
   }
 
+  public double[] getModuleDesiredAngles() {
+    double[] angles = new double[4];
+    angles[0] = leftFront.getDesiredAngle();
+    angles[1] = leftBack.getDesiredAngle();
+    angles[2] = rightBack.getDesiredAngle();
+    angles[3] = rightFront.getDesiredAngle();
+    return angles;
+  }
+
   public boolean isRedAlliance() {
     var alliance = DriverStation.getAlliance();
     if (alliance.isPresent()) {

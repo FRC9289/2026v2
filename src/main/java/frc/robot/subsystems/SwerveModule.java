@@ -35,6 +35,7 @@ public class SwerveModule extends SubsystemBase {
   private int turnID = 0;
 
   private Rotation2d lastAngle;
+  private SwerveModuleState desiredState;
 
   /** Creates a new SwerveModule. */
   public SwerveModule(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turnMotorReversed,
@@ -140,6 +141,11 @@ public class SwerveModule extends SubsystemBase {
 
     turnMotor.set(turnPIDController.calculate(getTurnMotorPositionWrapped(), desiredState.angle.getRadians()));
     lastAngle = angle;
+    this.desiredState = desiredState;
+  }
+
+  public double getDesiredAngle() {
+    return this.desiredState.angle.getDegrees();
   }
 
   public void stop() {
