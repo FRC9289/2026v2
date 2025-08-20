@@ -187,3 +187,6 @@ compile_commands.json
 .factorypath
 
 .fake
+
+# Wolfram's Ignores
+.vscode
