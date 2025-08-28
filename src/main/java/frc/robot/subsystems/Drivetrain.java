@@ -213,6 +213,10 @@ public class Drivetrain extends SubsystemBase {
     return poseEstimator.getEstimatedPosition();
   }
 
+  public SwerveDrivePoseEstimator getPoseEstimator() {
+    return poseEstimator;
+  }
+
   public void resetPose(Pose2d pose) {
     poseEstimator.resetPosition(getHeadingRotation2d(), getModulePositions(), pose);
   }

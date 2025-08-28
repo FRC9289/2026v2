@@ -8,6 +8,7 @@ import org.photonvision.EstimatedRobotPose;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -15,9 +16,10 @@ import edu.wpi.first.apriltag.AprilTagFields;
 
 import java.util.Optional;
 
-public class WolfPhoton extends SubsystemBase {
+public class WolfPoseEstimator extends SubsystemBase {
 
-    private static final WolfPhoton wolfPhoton = new WolfPhoton();
+    private static final WolfPoseEstimator wolfPoseEstimator = new WolfPoseEstimator();
+    private Drivetrain drivetrain = Drivetrain.getInstance();
 
     private final PhotonCamera frontCamera = new PhotonCamera("frontCam");
     private final PhotonCamera rearCamera = new PhotonCamera("rearCam");
@@ -38,7 +40,7 @@ public class WolfPhoton extends SubsystemBase {
 
     private Pose2d pose = new Pose2d();
 
-    public WolfPhoton() {
+    public WolfPoseEstimator() {
         frontEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
         rearEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
@@ -63,6 +65,8 @@ public class WolfPhoton extends SubsystemBase {
             pose = rearPose.get().estimatedPose.toPose2d();
         }
 
+        drivetrain.getPoseEstimator().addVisionMeasurement(pose, Timer.getFPGATimestamp());
+
         SmartDashboard.putNumber("PhotonX", pose.getX());
         SmartDashboard.putNumber("PhotonY", pose.getY());
         SmartDashboard.putNumber("PhotonRot", pose.getRotation().getDegrees());
@@ -72,7 +76,7 @@ public class WolfPhoton extends SubsystemBase {
         return pose;
     }
 
-    public static WolfPhoton getInstance() {
-        return wolfPhoton;
+    public static WolfPoseEstimator getInstance() {
+        return wolfPoseEstimator;
     }
 }

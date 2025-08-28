@@ -20,7 +20,7 @@ public class RobotContainer {
   private final Drivetrain drivetrain = Drivetrain.getInstance();
   private final SpecDrive specDrive = SpecDrive.getInstance();
   private final WolfSend wolfSend = WolfSend.getInstance();
-  private final WolfPhoton wolfPhoton = WolfPhoton.getInstance();
+  private final WolfPoseEstimator wolfPoseEstimator = WolfPoseEstimator.getInstance();
   private ParallelRaceGroup swerveStopCmd;
   SendableChooser<Command> auton_chooser;
   
@@ -66,4 +66,4 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return auton_chooser.getSelected();
   }
-}
+} //Nice - Wolfram121
