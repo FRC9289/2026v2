@@ -20,6 +20,7 @@ public class RobotContainer {
   private final Drivetrain drivetrain = Drivetrain.getInstance();
   private final SpecDrive specDrive = SpecDrive.getInstance();
   private final WolfSend wolfSend = WolfSend.getInstance();
+  private final WolfPhoton wolfPhoton = WolfPhoton.getInstance();
   private ParallelRaceGroup swerveStopCmd;
   SendableChooser<Command> auton_chooser;
   
