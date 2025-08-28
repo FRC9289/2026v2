@@ -16,7 +16,6 @@ public class SpecDrive extends SubsystemBase {
         this.pid.enableContinuousInput(-180, 180);
     }
 
-
     public double getMeasurement() {
         // Get the gyro yaw and ensure it is within -180 to 180
         yaw = drivetrain.getGyro().getYaw().getValueAsDouble();
