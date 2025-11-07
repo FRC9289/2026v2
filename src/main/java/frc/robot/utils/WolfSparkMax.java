@@ -9,27 +9,15 @@ import edu.wpi.first.wpilibj.Preferences;
 public class WolfSparkMax extends SparkMax {
     protected double target;
 
-    /**
-     * @param deviceId  The device ID.
-     * @param m         The this type (Brushed/Brushless).
-     * @param mode      The idle mode (kBrake/kCoast).
-     * @param limit     The current limit.
-     * @param inverted  The invert type of the this.
-     * @param kP        The proportional gain value.
-     * @param kI        The integral gain value.
-     * @param kD        The derivative gain value.
-     * @param minOutput Reverse power minimum to allow the controller to output
-     * @param maxOutput Reverse power maximum to allow the controller to output
-     */
-    public WolfSparkMax(int deviceId, MotorType m, IdleMode mode, int limit, boolean inverted) {
-        super(deviceId, m);
-        System.out.println("" + deviceId);
+    public WolfSparkMax(int ID, boolean brush, boolean brake, int lim, boolean inverted) {
+        super(ID, brush ? MotorType.kBrushed : MotorType.kBrushless);
+        System.out.println("" + ID);
 
         SparkMaxConfig config = new SparkMaxConfig();
         config
-                .inverted(inverted)
-                .idleMode(mode)
-                .smartCurrentLimit(limit);
+            .inverted(inverted)
+            .idleMode(brake ? IdleMode.kBrake : IdleMode.kCoast)
+            .smartCurrentLimit(lim);
 
         super.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -37,14 +25,13 @@ public class WolfSparkMax extends SparkMax {
         Preferences.setDouble(key, Preferences.getDouble(key, 0) + 1);
     }
 
-    public WolfSparkMax(int deviceId, MotorType m, IdleMode mode, int limit, boolean inverted,
-            double kP, double kI, double kD, double minOutput, double maxOutput) {
-        super(deviceId, m);
+    public WolfSparkMax(int ID, boolean brush, boolean brake, int lim, boolean inverted, double kP, double kI, double kD, double minOutput, double maxOutput) {
+        super(ID, brush ? MotorType.kBrushed : MotorType.kBrushless);
 
         SparkMaxConfig config = new SparkMaxConfig();
         config
-                .inverted(inverted)
-                .idleMode(mode);
+            .inverted(inverted)
+            .idleMode(brake ? IdleMode.kBrake : IdleMode.kCoast);
         config.closedLoop.pid(kP, kI, kD);
 
         super.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

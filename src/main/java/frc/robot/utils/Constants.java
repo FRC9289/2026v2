@@ -11,6 +11,7 @@ import edu.wpi.first.math.util.Units;
 
 public final class Constants {
   public static class ModuleIDs {
+    public static final int[] e = {8, 9};
   }
 
   public static class SwerveIDs {

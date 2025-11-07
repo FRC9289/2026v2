@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
 
 public class SwerveDriveCommands extends Command {
-  private Drivetrain drivetrain = Drivetrain.getInstance();
+  private Drivetrain drivetrain = Drivetrain.get();
   private boolean fieldOriented = true;
   private double frontSpeed;
   private double sideSpeed;

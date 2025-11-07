@@ -38,8 +38,7 @@ public class SwerveModule extends SubsystemBase {
   private SwerveModuleState desiredState;
 
   /** Creates a new SwerveModule. */
-  public SwerveModule(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turnMotorReversed,
-      int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
+  public SwerveModule(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turnMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
     this.absoluteEncoderOffset = absoluteEncoderOffset;
     this.absoluteEncoderReversed = absoluteEncoderReversed;
 
@@ -47,8 +46,8 @@ public class SwerveModule extends SubsystemBase {
     turnID = turnMotorId;
     absoluteEncoder = new CANcoder(absoluteEncoderId);
 
-    driveMotor = new WolfSparkMax(driveMotorId, MotorType.kBrushless, IdleMode.kCoast, 45, driveMotorReversed);
-    turnMotor = new WolfSparkMax(turnMotorId, MotorType.kBrushless, IdleMode.kCoast, 25, turnMotorReversed);
+    driveMotor = new WolfSparkMax(driveMotorId, false, false, 45, driveMotorReversed);
+    turnMotor = new WolfSparkMax(turnMotorId, false, false, 25, turnMotorReversed);
 
     driveEncoder = driveMotor.getEncoder();
     turnEncoder = turnMotor.getEncoder();
@@ -65,8 +64,7 @@ public class SwerveModule extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Drive Motor: " + driveID, getDriveMotorPosition());
     SmartDashboard.putNumber("Turn Motor: " + turnID, getTurnMotorPosition());
-    SmartDashboard.putNumber("Abs Wheel Angle (deg) - Motor: " + driveID,
-        absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+    SmartDashboard.putNumber("Abs Wheel Angle (deg) - Motor: " + driveID, absoluteEncoder.getAbsolutePosition().getValueAsDouble());
     SmartDashboard.putNumber("Vels - Motor: " + driveID, getDriveMotorVelocity());
   }
 

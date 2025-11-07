@@ -26,7 +26,7 @@ public class WolfSend extends SubsystemBase {
     private final NetworkTableEntry ANGLE;
     private final NetworkTableEntry statusText;
 
-    private Drivetrain drivetrain = Drivetrain.getInstance();
+    private Drivetrain drivetrain = Drivetrain.get();
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
     SwerveModuleState[] states = new SwerveModuleState[4];
     double[] desiredAngles = new double[4];

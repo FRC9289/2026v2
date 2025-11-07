@@ -17,8 +17,9 @@ public class RobotContainer {
   public static final Joystick wolfByte = new Joystick(1);
   public static double pov;
   public static final JoystickButton resetHeading_Start = new JoystickButton(controller3D, Constants.JoystickConstants.BaseRM);
-  private final Drivetrain drivetrain = Drivetrain.getInstance();
-  private final SpecDrive specDrive = SpecDrive.getInstance();
+  private final Drivetrain drivetrain = Drivetrain.get();
+  private final Elevator elevator = Elevator.get();
+  // private final SpecDrive specDrive = SpecDrive.get();
   private final WolfSend wolfSend = WolfSend.getInstance();
   private final WolfPoseEstimator wolfPoseEstimator = WolfPoseEstimator.getInstance();
   private ParallelRaceGroup swerveStopCmd;
@@ -46,24 +47,29 @@ public class RobotContainer {
     if (slider == 0)  {
       slider = 0.001;
     }
-
-    double frontSpeed = RobotContainer.controller3D.getRawAxis(JoystickConstants.X) * slider;
-    double sideSpeed = RobotContainer.controller3D.getRawAxis(JoystickConstants.Y) * slider;
-    double turnSpeed = RobotContainer.controller3D.getRawAxis(JoystickConstants.Rot) * slider;
-
-    drivetrain.setDefaultCommand(new SwerveDriveCommands(frontSpeed,sideSpeed,turnSpeed));
-
+    drivetrain.setDefaultCommand(new SwerveDriveCommands(controller3D.getRawAxis(JoystickConstants.X) * slider, controller3D.getRawAxis(JoystickConstants.Y) * slider, controller3D.getRawAxis(JoystickConstants.Rot) * slider));
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
 
-    //Comment out before driving. Will only let robot turn.
-    pov = wolfByte.getPOV();
-    if (pov != -1) {
-      specDrive.setDefaultCommand(new SpecDriveCommands(wolfByte.getPOV()));
+    int epos = 0;
+    if (wolfByte.getRawButton(2)) {
+      epos = 1;
+    } else if (wolfByte.getRawButton(3)) {
+      epos = 2;
+    } else if (wolfByte.getRawButton(4)) {
+      epos = 3;
     }
+    elevator.setDefaultCommand(new ElevatorCommands(epos));
+
+    //Comment out before driving. Will only let robot turn.
+    // pov = wolfByte.getPOV();
+    // if (pov != -1) {
+    //   specDrive.setDefaultCommand(new SpecDriveCommands(wolfByte.getPOV()));
+    // }
     //specDrive.setDefaultCommand(new SpecDriveCommands2(wolfByte.getRawAxis(0)));
   }
 
   public Command getAutonomousCommand() {
     return auton_chooser.getSelected();
   }
-} //Nice - Wolfram121
+}
+//Wolfram121 + Elizar Zinsmeister + Bismuthe

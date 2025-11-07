@@ -19,7 +19,7 @@ import java.util.Optional;
 public class WolfPoseEstimator extends SubsystemBase {
 
     private static final WolfPoseEstimator wolfPoseEstimator = new WolfPoseEstimator();
-    private Drivetrain drivetrain = Drivetrain.getInstance();
+    private Drivetrain drivetrain = Drivetrain.get();
 
     private final PhotonCamera frontCamera = new PhotonCamera("frontCam");
     private final PhotonCamera rearCamera = new PhotonCamera("rearCam");
