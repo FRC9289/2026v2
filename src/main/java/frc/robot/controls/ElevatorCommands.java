@@ -2,14 +2,23 @@ package frc.robot.controls;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
+import edu.wpi.first.wpilibj.Joystick;
 
 public class ElevatorCommands extends Command {
     private Elevator module;
     private int pos;
 
-    public ElevatorCommands(int pos) {
+    public ElevatorCommands(Joystick wolfByte) {
         this.module = Elevator.get();
-        this.pos = pos;
+        
+        if (wolfByte.getRawButton(0)) {
+            this.pos = 5000;
+        } else if (wolfByte.getRawButton(1)) {
+            this.pos = 10000;
+        } else if (wolfByte.getRawButton(2)) {
+            this.pos = 20000;
+        }
+
         addRequirements(module);
     }
 
