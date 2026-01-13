@@ -94,3 +94,5 @@ public class Shooter extends SubsystemBase {
         shooter_motor.setVoltage(total_volts);
     }
 }
+
+// bismuthe-83
