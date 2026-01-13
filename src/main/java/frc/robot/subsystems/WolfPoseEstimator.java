@@ -27,10 +27,10 @@ public class WolfPoseEstimator extends SubsystemBase {
     private final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
     private final Transform3d frontCamTransform = new Transform3d(
-        new Translation3d(0.5, 0.0, 0.0), new Rotation3d(0, 0, 0)); // 0.5m forward
+        new Translation3d(0.5, 0.0, 0.0), new Rotation3d(0, 0, 0));
 
     private final Transform3d rearCamTransform = new Transform3d(
-        new Translation3d(-0.5, 0.0, 0.0), new Rotation3d(0, 0, Math.PI)); // 0.5m backward, rotated 180°
+        new Translation3d(-0.5, 0.0, 0.0), new Rotation3d(0, 0, Math.PI));
 
     private final PhotonPoseEstimator frontEstimator = new PhotonPoseEstimator(
         fieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamTransform);
@@ -76,7 +76,7 @@ public class WolfPoseEstimator extends SubsystemBase {
         return pose;
     }
 
-    public static WolfPoseEstimator getInstance() {
+    public static WolfPoseEstimator get() {
         return wolfPoseEstimator;
     }
 }

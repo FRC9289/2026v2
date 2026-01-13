@@ -77,7 +77,7 @@ public class WolfSend extends SubsystemBase {
         statusText.setString("Transmission Active");
     }
 
-    public static WolfSend getInstance() {
+    public static WolfSend get() {
         return wolfSend;
     }
 }
