@@ -16,9 +16,10 @@ import edu.wpi.first.apriltag.AprilTagFields;
 
 import java.util.Optional;
 
-public class PVPoseEstimator extends SubsystemBase {
+public class WolfPoseEstimator extends SubsystemBase {
 
-    private Drivetrain drivetrain = Drivetrain.getInstance();
+    private static final WolfPoseEstimator wolfPoseEstimator = new WolfPoseEstimator();
+    private Drivetrain drivetrain = Drivetrain.get();
 
     private final PhotonCamera frontCamera = new PhotonCamera("frontCam");
     private final PhotonCamera rearCamera = new PhotonCamera("rearCam");
@@ -39,7 +40,7 @@ public class PVPoseEstimator extends SubsystemBase {
 
     private Pose2d pose = new Pose2d();
 
-    public PVPoseEstimator() {
+    public WolfPoseEstimator() {
         frontEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
         rearEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
@@ -75,7 +76,7 @@ public class PVPoseEstimator extends SubsystemBase {
         return pose;
     }
 
-    public static PVPoseEstimator getInstance() {
-        return new PVPoseEstimator();
+    public static WolfPoseEstimator getInstance() {
+        return wolfPoseEstimator;
     }
 }

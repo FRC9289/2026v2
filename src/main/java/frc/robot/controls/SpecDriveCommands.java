@@ -4,18 +4,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SpecDrive;
 
 public class SpecDriveCommands extends Command {
+    private SpecDrive module;
     private int pos;
-    private SpecDrive specDrive;
 
     public SpecDriveCommands(int pos) {
-        this.specDrive = SpecDrive.getInstance();
-        addRequirements(specDrive);
+        this.module = SpecDrive.get();
         this.pos = pos;
+        addRequirements(module);
     }
 
     @Override
     public void initialize() {
-        specDrive.PID().reset();
+        module.PID().reset();
     }
 
     @Override
@@ -23,16 +23,16 @@ public class SpecDriveCommands extends Command {
         if (this.pos > 180) {
             this.pos -= 360;
         }
-        specDrive.Pos(this.pos);
+        module.Pos(this.pos);
     }
 
     @Override
     public boolean isFinished() {
-        return this.pos == specDrive.getMeasurement();
+        return module.PID().atSetpoint();
     }
 
     @Override
     public void end(boolean interrupted) {
-        specDrive.PID().reset();
+        module.PID().reset();
     }
 }

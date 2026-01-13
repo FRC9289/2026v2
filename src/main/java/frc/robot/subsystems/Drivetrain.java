@@ -55,7 +55,7 @@ public class Drivetrain extends SubsystemBase {
 
   private static final Drivetrain drivetrain = new Drivetrain();
 
-  public static Drivetrain getInstance() {
+  public static Drivetrain get() {
     return drivetrain;
   }
 

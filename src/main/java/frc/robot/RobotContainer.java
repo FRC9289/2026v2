@@ -17,9 +17,11 @@ public class RobotContainer {
   public static final Joystick wolfByte = new Joystick(1);
   public static double pov;
   public static final JoystickButton resetHeading_Start = new JoystickButton(controller3D, Constants.JoystickConstants.BaseRM);
-  private final Drivetrain drivetrain = Drivetrain.getInstance();
-  private final SpecDrive specDrive = SpecDrive.getInstance();
-  private final PVPoseEstimator wolfPoseEstimator = PVPoseEstimator.getInstance();
+  private final Drivetrain drivetrain = Drivetrain.get();
+  private final Elevator elevator = Elevator.get();
+  // private final SpecDrive specDrive = SpecDrive.get();
+  private final WolfSend wolfSend = WolfSend.getInstance();
+  private final WolfPoseEstimator wolfPoseEstimator = WolfPoseEstimator.getInstance();
   private ParallelRaceGroup swerveStopCmd;
   SendableChooser<Command> auton_chooser;
   
@@ -31,7 +33,7 @@ public class RobotContainer {
     configureBindings();
 
     // Register swerveStopCmd in Pathplanner to stop robot
-    swerveStopCmd = new SwerveDriveCommands(0.0,0.0,0.0).withTimeout(3);
+    swerveStopCmd = new SwerveDriveCommand(0.0,0.0,0.0, wolfByte, false).withTimeout(3);
     NamedCommands.registerCommand("Swerve Stop", swerveStopCmd);
 
     //set up auton commands for the driver
@@ -41,28 +43,21 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    double slider = (-RobotContainer.controller3D.getRawAxis(JoystickConstants.Slider) + 1) / 2.0;
-    if (slider == 0)  {
-      slider = 0.001;
-    }
-
-    double frontSpeed = RobotContainer.controller3D.getRawAxis(JoystickConstants.X) * slider;
-    double sideSpeed = RobotContainer.controller3D.getRawAxis(JoystickConstants.Y) * slider;
-    double turnSpeed = RobotContainer.controller3D.getRawAxis(JoystickConstants.Rot) * slider;
-
-    drivetrain.setDefaultCommand(new SwerveDriveCommands(frontSpeed,sideSpeed,turnSpeed));
-
+    drivetrain.setDefaultCommand(new SwerveDriveCommand(controller3D.getRawAxis(JoystickConstants.X), controller3D.getRawAxis(JoystickConstants.Y), controller3D.getRawAxis(JoystickConstants.Rot), wolfByte, false));
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
 
+    elevator.setDefaultCommand(new ElevatorCommands(wolfByte));
+
     //Comment out before driving. Will only let robot turn.
-    pov = wolfByte.getPOV();
-    if (pov != -1) {
-      specDrive.setDefaultCommand(new SpecDriveCommands(wolfByte.getPOV()));
-    }
+    // pov = wolfByte.getPOV();
+    // if (pov != -1) {
+    //   specDrive.setDefaultCommand(new SpecDriveCommands(wolfByte.getPOV()));
+    // }
     //specDrive.setDefaultCommand(new SpecDriveCommands2(wolfByte.getRawAxis(0)));
   }
 
   public Command getAutonomousCommand() {
     return auton_chooser.getSelected();
   }
-} //Nice - Wolfram121
+}
+//Wolfram121 + Elizar Zinsmeister + Bismuthe
